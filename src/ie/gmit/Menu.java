@@ -1,25 +1,23 @@
 package ie.gmit;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-
-import ie.gmit.sw.FileParser;
-import ie.gmit.sw.Parser;
-import ie.gmit.sw.URLParser;
 
 public class Menu {
 	public static Scanner console = new Scanner (System.in);
+	private List<String> files = new ArrayList<String>();
 	
-	
-
 //===Menu UI===//
-private static void showMenu() {  
+public static void showMenu() {  
 	printMenu();
     int choice = console.nextInt();
         while (choice!= 3) {
         	switch (choice) {
 	            case 1://Enter files for comparision
 	            	System.out.println("How many documents would you like to compare: ");
-	            	parser();
+	            	choice = console.nextInt();
+	            	getFilesForParsing(choice);
 	            	break;
 	            case 0:  	
 	            	//exit application
@@ -43,34 +41,31 @@ private static void printMenu() {
 }
 	
 	//===Takes User input for parsing & parses URL or txt===//
-	private static void parser() {
-	
-    	//input for outputfile
-    	System.out.println("Please enter name of output file (include .txt)");
-		String outputfile = console.next();
-		//ensuring output file is valid
-		if(!(outputfile.endsWith(".txt")) ){
-			System.out.println("invalid name for output file");
+	private static List<String> getFilesForParsing(int numFiles) {
+		
+		List<String> files = new ArrayList<String>();
+		
+		for(int i = 0; i < numFiles; i++){
+	    	//input files
+	    	System.out.println("Please enter name(s) of input files (include .txt)");
+			String inputFile = console.next();
+			//ensuring input file is valid
+			if(!(inputFile.endsWith(".txt")) ){
+				System.out.println("invalid input file");
+			}
+			else{
+				files.add(inputFile);
+			}
 		}
+		return files;
+		
+	}
 
-    	
-		//FileParse
-		if(parseMe.endsWith(".txt")){
-			Parser parseobject = new FileParser();
-		//	parseobject.parse(parseMe, keyword, isEncrypt);
-			parseobject.parse(parseMe, keyword, outputfile);
-			System.out.println("File Parse Succesful");			
-		}
-		//URL Parse
-		else if(parseMe.startsWith("http")){
-			Parser parseobject = new URLParser();
-		//	parseobject.parse(parseMe,keyword);
-			parseobject.parse(parseMe, keyword, outputfile);
-			System.out.println("URL Parse Succesful");
-		}
-		//Handle Exception of invalid input
-		else{
-			System.out.println("Please enter a valid URL or .txt");			
-		}				
+
+	public List<String> getFiles() {
+		return files;
+	}
+	public void setFiles(List<String> files) {
+		this.files = files;
 	}
 }

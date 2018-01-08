@@ -24,17 +24,11 @@ public class FileParser extends Parser{
 		//pass file to buffered reader & begin parsing doc into shingles
 		try {
 			String line;
-
-			
 			while((line = br.readLine()) != null){
 				//remove spaces & punctuation & make  all lowercase
 				String[] words = line.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 				addWordsToBuffer(words);
-				//create shingles from words & put in queue for minhasher
-		//		Shingle s = getNextShingle(shingleSize);
-			//	q.put(s);
 				}
-	//		flushBuffer();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
