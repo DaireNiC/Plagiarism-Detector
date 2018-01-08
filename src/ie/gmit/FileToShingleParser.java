@@ -8,10 +8,10 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 
 	private BlockingQueue<Shingle> q;
 	private String file;
-	private String fileID;
+	private int fileID;
 	int shingleSize;
 	
-	public FileToShingleParser(String fileID, String file, BlockingQueue<Shingle> q, int shingleSize) throws FileNotFoundException {
+	public FileToShingleParser(int fileID, String file, BlockingQueue<Shingle> q, int shingleSize) throws FileNotFoundException {
 		super(file);
 		this.q = q;
 		this.shingleSize = shingleSize;
@@ -27,6 +27,8 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 			e.printStackTrace();
 		}
 	}
+	
+	
 
 	public Shingle getNextShingle(int shingleSize) {
 		

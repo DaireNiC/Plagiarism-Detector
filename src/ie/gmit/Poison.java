@@ -2,7 +2,7 @@ package ie.gmit;
 
 public class Poison extends Shingle {
 
-	public Poison(String fileID, int hashCode) {
+	public Poison(int fileID, int hashCode) {
 		super(fileID, hashCode);
 		this.setHashCode(-99);
 	}

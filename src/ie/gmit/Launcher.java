@@ -9,9 +9,9 @@ public class Launcher {
 	public static void main(String [] args) throws InterruptedException, FileNotFoundException{
 		
 		String filePath = "text.txt";
-		String id = "doc1";
+		int id = 1;
 		String filePath2 = "text2.txt";
-		String id2 = "doc2";
+		int id2 = 2;
 		
 		int shingleSize = 3;
 		// Holds all the shingles that have been created from documents
