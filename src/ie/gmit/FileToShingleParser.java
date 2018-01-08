@@ -27,8 +27,6 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 	public Shingle getNextShingle(int shingleSize) {
 		
@@ -38,10 +36,15 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 			if(getBuffer().peek() != null){
 				sb.append(getBuffer().poll());
 			}
+			else{
+				System.out.println(sb.toString());
+				return null;
+			}
 		}
 
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
 		return new Shingle(fileID, sb.toString().hashCode());
+		
 	}
 	
 	private void flushBuffer() throws InterruptedException{
@@ -50,7 +53,7 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 			if(s != null){
 				q.put(s);
 			}else{
-				System.out.println("throwing poison************");
+				System.out.println("*************throwing poison************");
 				q.put(new Poison(fileID, 0));
 			}
 		}

@@ -28,8 +28,7 @@ public class FileParser extends Parser{
 			
 			while((line = br.readLine()) != null){
 				//remove spaces & punctuation & make  all lowercase
-				String lowercaseLine = line.toLowerCase();		
-				String [] words = lowercaseLine.split(" ");
+				String[] words = line.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
 				addWordsToBuffer(words);
 				//create shingles from words & put in queue for minhasher
 		//		Shingle s = getNextShingle(shingleSize);
