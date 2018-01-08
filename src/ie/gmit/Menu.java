@@ -17,12 +17,11 @@ private static void showMenu() {
     int choice = console.nextInt();
         while (choice!= 3) {
         	switch (choice) {
-	            case 1://Encrypt case
-	            case 2://Decrypt case
-	            	//calls the parser method which determine if input is url or .txt
+	            case 1://Enter files for comparision
+	            	System.out.println("How many documents would you like to compare: ");
 	            	parser();
 	            	break;
-	            case 3:  	
+	            case 0:  	
 	            	//exit application
 	            	System.exit(0);
 	            	 break;
@@ -45,15 +44,7 @@ private static void printMenu() {
 	
 	//===Takes User input for parsing & parses URL or txt===//
 	private static void parser() {
-		
-		//input for url or txt
-		System.out.print("\n====Option (1)====\nEnter a URL(begining with http) or  a file (.txt) that you wish to parse: ");
-    	String parseMe  = console.next();
-
-    	//input for keyword
-    	System.out.println("Please enter Keyword: ");
-		String keyword = console.next();
-		 		
+	
     	//input for outputfile
     	System.out.println("Please enter name of output file (include .txt)");
 		String outputfile = console.next();

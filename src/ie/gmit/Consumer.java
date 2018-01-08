@@ -41,7 +41,7 @@ public class Consumer implements Minhasher, Runnable {
 					pool.execute(new Runnable(){
 						public void run(){
 							List<Integer> list = map.get(s.getFileID());
-							for(int i = 0; i < minHashes.length -1; i ++){
+							for(int i = 0; i < minHashes.length ; i ++){
 								//get the hashcode for the shingle --> make it random by using random num and XOR operator
 								int value = s.getHashCode()^minHashes[i];
 							//	System.out.println("value is : " + value);
@@ -59,7 +59,7 @@ public class Consumer implements Minhasher, Runnable {
 									}
 								}
 							}
-							map.put(s.getFileID(), list);
+						//	map.put(s.getFileID(), list);
 						}
 					});
 				}
@@ -78,18 +78,7 @@ public class Consumer implements Minhasher, Runnable {
 				
 			}
 		}
-		System.out.println(map.get(1).size());
-		List<Integer> list = map.get(1);
-		for(int minhash :list){
-			System.out.println(minhash);
-		}
-		System.out.println(map.get(2).size());
-		
-		List<Integer> intersection = map.get(1);
-		intersection.retainAll(map.get(2));
-		System.out.println("same" + intersection.size());
-		float jaccard = ((float)intersection.size() / (((map.get(1).size() + map.get(2).size()) - intersection.size() )) );
-		System.out.println(jaccard);
+
 	}
 	
 	
@@ -102,6 +91,10 @@ public class Consumer implements Minhasher, Runnable {
 		}
 		
 		return minHashes;
+	}
+	
+	public Map<Integer, List<Integer>> getMap(){
+		return this.map;
 	}
 
 }

@@ -41,7 +41,6 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 				return null;
 			}
 		}
-
 		//System.out.println(sb.toString());
 		return new Shingle(fileID, sb.toString().hashCode());
 		
