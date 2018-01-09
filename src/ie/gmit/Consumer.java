@@ -11,13 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class Consumer implements Minhasher, Runnable {
 
 	private BlockingQueue<Shingle> q;
 	private int k;
 	private int[] minHashes;
-	private Map<Integer, List<Integer>> map = new ConcurrentHashMap<>();
+	private Map<Integer, List<Integer>> map;
 	private ExecutorService pool;
 
 	public Consumer(BlockingQueue<Shingle> q, int k, int poolSize) {
@@ -25,6 +26,7 @@ public class Consumer implements Minhasher, Runnable {
 		this.k = k;
 		this.pool = Executors.newFixedThreadPool(poolSize);
 		this.minHashes = new int[k];
+		this.map = new ConcurrentHashMap<Integer, List<Integer>>(poolSize);
 		initHashes(minHashes);
 	}
 
@@ -36,25 +38,25 @@ public class Consumer implements Minhasher, Runnable {
 				Shingle s = q.take();
 				// do poison check
 				if (s instanceof Poison) {
+					System.out.println("finished with doc" + s.getFileID());
 					docCount--;
 				} else {
 					pool.execute(new Runnable() {
 						public void run() {
-							List<Integer> list = map.get(s.getFileID());
 							for (int i = 0; i < minHashes.length; i++) {
 								// get the hashcode for the shingle --> make it
 								// random by using random num and XOR operator
-								int value = s.getHashCode() ^ minHashes[i];
+								int value = s.hashCode() ^ minHashes[i];
+								List<Integer> list = map.get(s.getFileID());
 								if (list == null) {
 									list = new ArrayList<Integer>(Collections.nCopies(k, Integer.MAX_VALUE));
-									System.out.println("inserting  new doc into map***********************");
 									map.put(s.getFileID(), list);
+									System.out.println("inserting new  doc" + s.getFileID());
 								} else {
 									if (list.get(i) > value) {
 										list.set(i, value);
 									}
 								}
-							//	map.put(s.getFileID(), list);
 							}
 						}
 					});// runnable
@@ -64,6 +66,19 @@ public class Consumer implements Minhasher, Runnable {
 			}
 
 		}
+		// No more threads are submitted to poolservice
+		pool.shutdown();
+		
+		// Blocks until all threads in the pool  have finished!
+		try {
+			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			System.out.println("fail");
+			e.printStackTrace();
+			
+		}
+		
+		System.out.println("Done");
 	}
 
 	@Override
@@ -71,7 +86,6 @@ public class Consumer implements Minhasher, Runnable {
 		Random r = new Random();
 		for (int i = 0; i < minHashes.length; i++) {
 			minHashes[i] = r.nextInt();
-			System.out.println("radnom: " + minHashes[i]);
 		}
 
 		return minHashes;

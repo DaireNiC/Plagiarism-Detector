@@ -22,12 +22,12 @@ public class Launcher {
 		
 		String filePath = "text2.txt";
 		int id = 1;
-		String filePath2 = "WarAndPeace.txt";
+		String filePath2 = "text.txt";
 		int id2 = 2;
 		
-		int k = 200;
-		int poolSize = 10;
-		
+		int k = 30;
+		int poolSize = 8;
+		System.out.println();
 		int shingleSize = 3;
 		// Holds all the shingles that have been created from documents
 		// minhash threads take from this queue
@@ -55,9 +55,7 @@ public class Launcher {
 		
 		System.out.println(map.get(1).size());
 		List<Integer> list = map.get(1);
-		for(int minhash :list){
-			System.out.println(minhash);
-		}
+
 		System.out.println(map.get(2).size());
 		
 		List<Integer> intersection = map.get(1);

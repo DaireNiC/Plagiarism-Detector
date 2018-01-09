@@ -56,6 +56,8 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 				q.put(new Poison(fileID, 0));
 			}
 		}
+		//System.out.println("*************throwing poison************");
+		//q.put(new Poison(fileID, 0));
 		
 	}
 }
