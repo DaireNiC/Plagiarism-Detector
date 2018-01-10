@@ -25,7 +25,7 @@ public class Launcher {
 		String filePath2 = "text.txt";
 		int id2 = 2;
 		
-		int k = 30;
+		int k = 300;
 		int poolSize = 8;
 		System.out.println();
 		int shingleSize = 3;

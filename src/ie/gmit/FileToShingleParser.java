@@ -29,7 +29,6 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 	}
 
 	public Shingle getNextShingle(int shingleSize) {
-		
 		StringBuilder sb = new StringBuilder();
 		
 		for(int i =0; i < shingleSize;i++){
@@ -37,26 +36,31 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 				sb.append(getBuffer().poll());
 			}
 			else{
-				System.out.println(sb.toString());
+			System.out.println("null found" + sb.toString());
 				return null;
 			}
 		}
-		//System.out.println(sb.toString());
+	//	System.out.println(sb.toString());
 		return new Shingle(fileID, sb.toString().hashCode());
 		
 	}
 	
 	private void flushBuffer() throws InterruptedException{
 		while(getBuffer().size() > 0){
+			System.out.println(getBuffer().size() );
 			Shingle s = getNextShingle(shingleSize);
 			if(s != null){
 				q.put(s);
-			}else{
-				System.out.println("*************throwing poison************");
+			}
+			//after returning from putting final 3 shingels
+			if( s == null || getBuffer().size() == 0 ){
+				System.out.println("*************throwing poison************" + fileID);
 				q.put(new Poison(fileID, 0));
 			}
+			
 		}
-		//System.out.println("*************throwing poison************");
+
+	//	System.out.println("*************throwing poison************");
 		//q.put(new Poison(fileID, 0));
 		
 	}
