@@ -1,6 +1,6 @@
 package ie.gmit;
 
-public interface Minhasher {
+public interface Minhashator {
 
 	int[] initHashes(int [] minHashes);
 }

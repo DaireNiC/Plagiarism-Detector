@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Consumer implements Minhasher, Runnable {
+public class Consumer implements Minhashator, Runnable {
 
 	private BlockingQueue<Shingle> q;
 	private int k;
@@ -26,7 +26,7 @@ public class Consumer implements Minhasher, Runnable {
 		this.k = k;
 		this.pool = Executors.newFixedThreadPool(poolSize);
 		this.minHashes = new int[k];
-		this.map = new ConcurrentHashMap<Integer, List<Integer>>(poolSize);
+		this.map = new ConcurrentHashMap<Integer, List<Integer>>(2, 0.9f, poolSize);
 		initHashes(minHashes);
 	}
 

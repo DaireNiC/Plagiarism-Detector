@@ -40,19 +40,19 @@ public class FileToShingleParser extends FileParser implements Runnable, Shingle
 				return null;
 			}
 		}
-	//	System.out.println(sb.toString());
+		System.out.println(sb.toString());
 		return new Shingle(fileID, sb.toString().hashCode());
 		
 	}
 	
 	private void flushBuffer() throws InterruptedException{
 		while(getBuffer().size() > 0){
-			System.out.println(getBuffer().size() );
+		//	System.out.println(getBuffer().size() );
 			Shingle s = getNextShingle(shingleSize);
 			if(s != null){
 				q.put(s);
 			}
-			//after returning from putting final 3 shingels
+			//covers case of returning from putting final shingle on the q & buffer == 0
 			if( s == null || getBuffer().size() == 0 ){
 				System.out.println("*************throwing poison************" + fileID);
 				q.put(new Poison(fileID, 0));

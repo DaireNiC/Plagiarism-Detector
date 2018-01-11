@@ -1,5 +1,6 @@
 package ie.gmit;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +8,11 @@ import java.util.Scanner;
 public class Menu {
 	public static Scanner console = new Scanner (System.in);
 	private List<String> files = new ArrayList<String>();
+
+public	static void main(String []  args){
+	showMenu();
+}
+	
 	
 //===Menu UI===//
 public static void showMenu() {  
@@ -17,7 +23,15 @@ public static void showMenu() {
 	            case 1://Enter files for comparision
 	            	System.out.println("How many documents would you like to compare: ");
 	            	choice = console.nextInt();
-	            	getFilesForParsing(choice);
+				try {
+					getFilesForParsing(choice);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	            	break;
 	            case 0:  	
 	            	//exit application
@@ -41,7 +55,7 @@ private static void printMenu() {
 }
 	
 	//===Takes User input for parsing & parses URL or txt===//
-	private static List<String> getFilesForParsing(int numFiles) {
+	private static void getFilesForParsing(int numFiles) throws FileNotFoundException, InterruptedException {
 		
 		List<String> files = new ArrayList<String>();
 		
@@ -57,7 +71,17 @@ private static void printMenu() {
 				files.add(inputFile);
 			}
 		}
-		return files;
+		System.out.println("Please enter the shingle size you wish to use");
+		System.out.println("shingle size: ");
+		int shingleSize = console.nextInt();
+    	System.out.println("Please enter the shingle size you wish to use\n"
+    			+ "Note: A larger size will result in longer run times & in some cases improved accuracy \n Size (200 - 300) recommended");
+    	System.out.println("sample size: ");
+    	int k = console.nextInt();
+		
+		//launch similarity checker with given valid input
+		Launcher l = new Launcher(files, shingleSize, k);
+		l.launch();
 		
 	}
 

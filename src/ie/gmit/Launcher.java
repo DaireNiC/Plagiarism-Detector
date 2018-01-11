@@ -5,20 +5,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import net.sourceforge.plantuml.api.MyRunnable;
 
 public class Launcher {
-
-	private static Menu menu ;
+	private BlockingQueue <Shingle> q;
+	private List<String> files;
+	private int shingleSize;
+	private int k;
+	private int threadPoolSize;
 	
-	public Launcher(){
-		this.menu = new Menu();
+	public Launcher(List<String> files, int shingleSize, int k){
+		this.files = files;
+		this.shingleSize = shingleSize;
+		this.k = k;
+		this.threadPoolSize = 8;
+		this.q = new LinkedBlockingQueue<Shingle>(150);
 	}
 	
-	public static void main(String [] args) throws InterruptedException, FileNotFoundException{
+	public  void launch() throws InterruptedException, FileNotFoundException{
+
 		
-	//	menu = new Menu();
-	//	menu.showMenu();
+		Consumer consumer = new Consumer(q,k, threadPoolSize);
+		Thread tConsumer = new Thread(consumer);
+		
+		
+		ExecutorService executor = Executors.newFixedThreadPool(files.size());
+
+		for(int i =0; i < files.size(); i ++)
+		{
+		    System.out.println("starting stread for doc " + (i+1));
+		    Thread t = new Thread(new FileToShingleParser(i+1, files.get(i), q, shingleSize));
+		    executor.submit(t);
+		}
+		tConsumer.start();
+
+		executor.shutdown();
+		executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
+		System.out.println("thread shutdown..");
+		tConsumer.join();
+		/*
+		 * 
+		 * 
 		
 		String filePath = "text2.txt";
 		int id = 1;
@@ -45,6 +77,11 @@ public class Launcher {
 		t2.join();
 		
 		t3.join();
+		
+		
+		tConsu
+	*/	
+		
 		
 		Map <Integer,List<Integer>> map = new HashMap<Integer, List<Integer>>();
 		map = consumer.getMap();
