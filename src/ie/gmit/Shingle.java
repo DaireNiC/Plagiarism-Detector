@@ -1,14 +1,19 @@
 package ie.gmit;
 
+/**
+ * @author User
+ *
+ */
 public class Shingle {
 
 	//ID of the doccument shingle belongs to
 	private int fileID;
+	//hashCode of the words making up the shingle
 	private int hashCode;
 	
-	public Shingle(int fileID2, int hashCode) {
-		this.setFileID(fileID2);
-		this.setHashCode(hashCode); 
+	public Shingle(int fileID, int hashCode) {
+		this.fileID = fileID;
+		this.hashCode = hashCode; 
 	}
 
 	public int getFileID() {
@@ -33,19 +38,5 @@ public class Shingle {
 		int result = 1;
 		result = prime * result + hashCode;
 		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Shingle other = (Shingle) obj;
-		if (hashCode != other.hashCode)
-			return false;
-		return true;
 	}
 }

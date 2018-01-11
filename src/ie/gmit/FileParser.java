@@ -31,14 +31,13 @@ public class FileParser extends Parser{
 				}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
-	private void addWordsToBuffer(String[] words) {
+	
+	public void addWordsToBuffer(String[] words) {
 		for (String s : words){
 			buffer.add(s);
 		}
-		
 	}
 
 	public Deque<String> getBuffer() {

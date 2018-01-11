@@ -1,6 +1,6 @@
 package ie.gmit;
 
 public abstract interface ShingleCreator {
-	Shingle getNextShingle(int shingleSize);
+	Shingle shinglize(int shingleSize);
 	
 }

@@ -2,44 +2,44 @@ package ie.gmit;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class Consumer implements Minhashator, Runnable {
+public class ShingleMinHasher implements Minhashator, Runnable {
 
 	private BlockingQueue<Shingle> q;
 	private int k;
+	private int numFiles;
 	private int[] minHashes;
 	private Map<Integer, List<Integer>> map;
 	private ExecutorService pool;
+	private final int poolSize;
 
-	public Consumer(BlockingQueue<Shingle> q, int k, int poolSize) {
+	public ShingleMinHasher(BlockingQueue<Shingle> q, int k, int numFiles) {
 		this.q = q;
+		this.poolSize = 8;
+		this.numFiles = numFiles;
 		this.k = k;
 		this.pool = Executors.newFixedThreadPool(poolSize);
 		this.minHashes = new int[k];
-		this.map = new ConcurrentHashMap<Integer, List<Integer>>(2, 0.9f, poolSize);
-		initHashes(minHashes);
+		this.map = new ConcurrentHashMap<Integer, List<Integer>>(numFiles, 0.9f, poolSize);
 	}
 
 	public void run() {
-
-		int docCount = 2;// change
-		while (docCount > 0) {
+		while (numFiles > 0) {
 			try {
+				// take a shingle from the queue
 				Shingle s = q.take();
 				// do poison check
 				if (s instanceof Poison) {
 					System.out.println("finished with doc" + s.getFileID());
-					docCount--;
+					numFiles--;
 				} else {
 					pool.execute(new Runnable() {
 						public void run() {
@@ -64,35 +64,34 @@ public class Consumer implements Minhashator, Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
 		}
-		// No more threads are submitted to poolservice
+		//No more threads are submitted to poolservice
 		pool.shutdown();
-		
-		// Blocks until all threads in the pool  have finished!
+		// Blocks until all threads in the pool have finished!
 		try {
 			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
-			System.out.println("fail");
+			System.out.println("failure shutting down threa pool");
 			e.printStackTrace();
-			
 		}
-		
 		System.out.println("Done");
 	}
 
 	@Override
-	public int[] initHashes(int[] minHashes) {
+	public void initHashes() {
 		Random r = new Random();
 		for (int i = 0; i < minHashes.length; i++) {
-			minHashes[i] = r.nextInt();
+			this.minHashes[i] = r.nextInt();
 		}
-
-		return minHashes;
 	}
 
-	public Map<Integer, List<Integer>> getMap() {
-		return this.map;
+	//compute the jaccard index of the results
+	public float getJaccardIndex() {
+		int i = 1;
+		List<Integer> intersection = map.get(i);
+		intersection.retainAll(map.get(i +1));
+		System.out.println("Number of same hashes" + intersection.size());
+		float jaccard = (float) intersection.size() / (k * map.size() - (float) intersection.size());
+		return jaccard;
 	}
-
 }

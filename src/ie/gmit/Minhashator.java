@@ -1,6 +1,12 @@
 package ie.gmit;
 
+/**
+ * 
+ * The interface Minhashator. 
+ * @author Daire Ní Chatháin
+ * 
+ */
 public interface Minhashator {
 
-	int[] initHashes(int [] minHashes);
+	 public void initHashes();
 }
