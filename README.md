@@ -1,7 +1,7 @@
 # Plagiarism-Detector
 A Java command-line application that computes the similarity of two or more doccuments
 
-### [Contents]
+### Contents
 1. [How to Run the Application](#howto)
 1. [Project Design](#projectdesign))
           
