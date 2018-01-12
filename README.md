@@ -1,15 +1,11 @@
 # Plagiarism-Detector
 A Java command-line application that computes the similarity of two or more doccuments
 
-## About
-Name: Daire Ní Chatháin
-ID: G00334757
-
-#### Contents:
-          1. How to run the application
-          2. Project Design
+### [Contents]
+1. [How to Run the Application](#howto)
+1. [Project Design](#projectdesign))
           
-## How to Run the Application
+## [How to Run the Application](#howto)
 ### Clone this repo
 ```bash
 git clone https://github.com/DaireNiC/Plagiarism-Detector
@@ -26,8 +22,7 @@ The user will then be presented with a menu. From here the user can enter the pa
 to the files they wish to compare. The Jaccard similarity is then calculated and presented
 to the user. 
 
-## Project Design
-
+## [Project Design](#projectdesign)
 ![alt text](https://github.com/DaireNiC/Plagiarism-Detector/blob/master/design.png)
 
 Throughout the design and development of the API, great effort was dedicated
